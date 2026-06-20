@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Portofolio Zaidaan</title>
-    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Urbanist:wght@400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght=500;700&family=Urbanist:wght=400;600&display=swap" rel="stylesheet">
     <style>
         :root { 
             --bg: #07070a; 
@@ -53,7 +53,7 @@
         }
         .logo { font-family: 'Space Grotesk', sans-serif; font-size: 1.6rem; font-weight: 700; color: var(--accent); cursor: pointer; text-shadow: 0 0 10px var(--glow); }
         .nav-links { display: flex; gap: 5px; }
-        .nav-item { background: none; border: none; color: #777; font-weight: 600; font-family: 'Space Grotesk', sans-serif; padding: 8px 14px; cursor: pointer; transition: 0.3s; border-radius: 8px; font-size: 1rem; }
+        .nav-item { background: none; border: none; color: #777; font-weight: 600; font-family: 'Space Grotesk', sans-serif; padding: 8px 14px; cursor: pointer; transition: 0.3s; border-radius: 8px; font-size: 1rem; position: relative; z-index: 10000; }
         .nav-item:hover, .nav-item.active { color: var(--accent) !important; background: rgba(255,255,255,0.02); text-shadow: 0 0 8px var(--accent); }
 
         .slider-container {
@@ -96,20 +96,19 @@
         .stat-box h3 { font-family: 'Space Grotesk', sans-serif; font-size: 3rem; color: var(--accent); text-shadow: 0 0 15px var(--glow); }
         .stat-box p { font-size: 1rem; opacity: 0.5; text-transform: uppercase; letter-spacing: 1px; margin-top: 5px; }
 
-        /* REVISI TOTAL: Ukuran kontainer dikunci 0px agar tidak memblokir screen */
+        /* FIX AMAN: Kontainer berukuran nihil & pointer-events dimatikan total */
         .rocket-fleet { 
             position: fixed; 
             top: 50%; 
             left: 0; 
-            width: 0px; 
-            height: 0px;
+            width: 0; 
+            height: 0;
             transform: translateY(-50%); 
             pointer-events: none; 
-            z-index: 99999; 
-            display: flex; 
-            flex-direction: column; 
-            gap: 25px; 
+            z-index: 99; 
         }
+        
+        /* Menggunakan posisi absolute murni agar gap antar roket konsisten di tengah */
         .rocket { 
             font-size: 3.8rem; 
             filter: drop-shadow(0 0 15px var(--fire)) drop-shadow(0 0 30px var(--accent)); 
@@ -120,7 +119,12 @@
             pointer-events: none;
         }
         
-        /* Animasi tarikan halaman yang presisi di tengah layar */
+        /* Posisi Vertikal Masing-masing Roket */
+        .rocket:nth-child(1) { top: -80px; }
+        .rocket:nth-child(2) { top: 0px; }
+        .rocket:nth-child(3) { top: 80px; }
+        
+        /* Jalur Animasi Melesat */
         .launch .rocket:nth-child(1) { animation: pullScreen 0.75s cubic-bezier(0.25, 1, 0.5, 1) forwards; }
         .launch .rocket:nth-child(2) { animation: pullScreen 0.85s cubic-bezier(0.25, 1, 0.5, 1) 0.05s forwards; }
         .launch .rocket:nth-child(3) { animation: pullScreen 0.8s cubic-bezier(0.25, 1, 0.5, 1) 0.02s forwards; }
@@ -132,7 +136,7 @@
             100% { left: 105vw; opacity: 0; transform: rotate(90deg) scale(0.8); }
         }
 
-        .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; width: 100%; max-width: 500px; margin-top: 25px; }
+        .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; width: 100%; max-width: 500px; margin-top: 25px; position: relative; z-index: 10; }
         .contact-grid a { 
             display: flex; align-items: center; justify-content: center; gap: 12px; padding: 16px; 
             background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.08); color: #fff; 
@@ -170,7 +174,7 @@
     <div id="fleet" class="rocket-fleet">
         <div class="rocket">🚀</div>
         <div class="rocket">🚀</div>
-        <div class="rocket-fleet-spacer" style="height:0;"></div> <div class="rocket">🚀</div>
+        <div class="rocket">🚀</div>
     </div>
 
     <nav>
@@ -212,7 +216,7 @@
                             <p>Total Likes</p>
                         </div>
                     </div>
-                    <a href="https://www.tiktok.com/@semogarilet" target="_blank" style="color: var(--accent); text-decoration: none; display: inline-block; margin-top: 25px; font-weight: 700; font-family: 'Space Grotesk', sans-serif; border-bottom: 2px solid var(--accent); padding-bottom: 4px;">Kunjungi TikTok →</a>
+                    <a href="https://www.tiktok.com/@semogarilet" target="_blank" style="color: var(--accent); text-decoration: none; display: inline-block; margin-top: 25px; font-weight: 700; font-family: 'Space Grotesk', sans-serif; border-bottom: 2px solid var(--accent); padding-bottom: 4px; position: relative; z-index: 20;">Kunjungi TikTok →</a>
                 </div>
             </div>
 
@@ -232,4 +236,32 @@
                         WhatsApp
                     </a>
                     <a href="https://github.com/zidaancuy-beep" target="_blank" class="btn-github">
-                        <svg viewBox="0 0 24 24"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23
+                        <svg viewBox="0 0 24 24"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>
+                        GitHub
+                    </a>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        const slider = document.getElementById('slider');
+        const fleet = document.getElementById('fleet');
+        
+        function goToPage(index) {
+            // Hapus class active dari semua menu, lalu pasang di menu yang di-klik
+            document.querySelectorAll('.nav-links .nav-item').forEach(btn => btn.classList.remove('active'));
+            document.getElementById(`link-${index}`).classList.add('active');
+            
+            // Geser halaman slider utama
+            slider.style.transform = `translateX(-${index * 100}vw)`;
+            
+            // Picu ulang animasi 3 roket melesat horizontal pas di tengah screen
+            fleet.classList.remove('launch');
+            void fleet.offsetWidth; 
+            fleet.classList.add('launch');
+        }
+    </script>
+</body>
+</html>
