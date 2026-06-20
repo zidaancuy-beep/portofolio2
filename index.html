@@ -96,15 +96,16 @@
         .stat-box h3 { font-family: 'Space Grotesk', sans-serif; font-size: 3rem; color: var(--accent); text-shadow: 0 0 15px var(--glow); }
         .stat-box p { font-size: 1rem; opacity: 0.5; text-transform: uppercase; letter-spacing: 1px; margin-top: 5px; }
 
-        /* SAKTI: DIKASIH POINTER-EVENTS NONE BIAR KLIKAN JARI GAK TERHALANG */
+        /* REVISI TOTAL: Ukuran kontainer dikunci 0px agar tidak memblokir screen */
         .rocket-fleet { 
             position: fixed; 
             top: 50%; 
-            left: -150px; 
-            width: 150px; 
+            left: 0; 
+            width: 0px; 
+            height: 0px;
             transform: translateY(-50%); 
-            pointer-events: none; /* Sentuhan jari tembus ke tombol di belakangnya */
-            z-index: 99999; /* Tetap paling depan secara visual */
+            pointer-events: none; 
+            z-index: 99999; 
             display: flex; 
             flex-direction: column; 
             gap: 25px; 
@@ -113,10 +114,13 @@
             font-size: 3.8rem; 
             filter: drop-shadow(0 0 15px var(--fire)) drop-shadow(0 0 30px var(--accent)); 
             opacity: 0; 
+            position: absolute;
+            left: -150px;
             transform: rotate(90deg);
-            pointer-events: none; /* Keamanan ganda */
+            pointer-events: none;
         }
         
+        /* Animasi tarikan halaman yang presisi di tengah layar */
         .launch .rocket:nth-child(1) { animation: pullScreen 0.75s cubic-bezier(0.25, 1, 0.5, 1) forwards; }
         .launch .rocket:nth-child(2) { animation: pullScreen 0.85s cubic-bezier(0.25, 1, 0.5, 1) 0.05s forwards; }
         .launch .rocket:nth-child(3) { animation: pullScreen 0.8s cubic-bezier(0.25, 1, 0.5, 1) 0.02s forwards; }
@@ -125,7 +129,7 @@
             0% { left: -150px; opacity: 0; transform: rotate(90deg) scale(0.7); }
             15% { opacity: 1; transform: rotate(90deg) scale(1.1); }
             70% { opacity: 1; transform: rotate(90deg) scale(1); }
-            100% { left: calc(100vw + 150px); opacity: 0; transform: rotate(90deg) scale(0.8); }
+            100% { left: 105vw; opacity: 0; transform: rotate(90deg) scale(0.8); }
         }
 
         .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; width: 100%; max-width: 500px; margin-top: 25px; }
@@ -166,7 +170,7 @@
     <div id="fleet" class="rocket-fleet">
         <div class="rocket">🚀</div>
         <div class="rocket">🚀</div>
-        <div class="rocket">🚀</div>
+        <div class="rocket-fleet-spacer" style="height:0;"></div> <div class="rocket">🚀</div>
     </div>
 
     <nav>
@@ -228,4 +232,4 @@
                         WhatsApp
                     </a>
                     <a href="https://github.com/zidaancuy-beep" target="_blank" class="btn-github">
-                        <svg viewBox="0 0 24 24"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.
+                        <svg viewBox="0 0 24 24"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23
