@@ -10,6 +10,7 @@
             --bg: #07070a; 
             --accent: #00adb5; 
             --fire: #ff4d00; 
+            --fire-core: #ffae00;
             --text: #f0f0f0; 
             --glow: rgba(0, 173, 181, 0.25);
         }
@@ -96,7 +97,7 @@
         .stat-box h3 { font-family: 'Space Grotesk', sans-serif; font-size: 3rem; color: var(--accent); text-shadow: 0 0 15px var(--glow); }
         .stat-box p { font-size: 1rem; opacity: 0.5; text-transform: uppercase; letter-spacing: 1px; margin-top: 5px; }
 
-        /* FIX AMAN: Kontainer berukuran nihil & pointer-events dimatikan total */
+        /* KONTROL AMAN: Kontainer mati total agar klik tidak terganggu */
         .rocket-fleet { 
             position: fixed; 
             top: 50%; 
@@ -105,35 +106,89 @@
             height: 0;
             transform: translateY(-50%); 
             pointer-events: none; 
-            z-index: 99; 
+            z-index: 999; 
         }
         
-        /* Menggunakan posisi absolute murni agar gap antar roket konsisten di tengah */
-        .rocket { 
-            font-size: 3.8rem; 
-            filter: drop-shadow(0 0 15px var(--fire)) drop-shadow(0 0 30px var(--accent)); 
-            opacity: 0; 
+        /* Desain Roket Realistis & Modul Asap */
+        .rocket-wrapper {
             position: absolute;
-            left: -150px;
-            transform: rotate(90deg);
+            left: -350px; /* Sembunyi di kiri layar */
+            display: flex;
+            align-items: center;
             pointer-events: none;
+            opacity: 0;
         }
-        
-        /* Posisi Vertikal Masing-masing Roket */
-        .rocket:nth-child(1) { top: -80px; }
-        .rocket:nth-child(2) { top: 0px; }
-        .rocket:nth-child(3) { top: 80px; }
-        
-        /* Jalur Animasi Melesat */
-        .launch .rocket:nth-child(1) { animation: pullScreen 0.75s cubic-bezier(0.25, 1, 0.5, 1) forwards; }
-        .launch .rocket:nth-child(2) { animation: pullScreen 0.85s cubic-bezier(0.25, 1, 0.5, 1) 0.05s forwards; }
-        .launch .rocket:nth-child(3) { animation: pullScreen 0.8s cubic-bezier(0.25, 1, 0.5, 1) 0.02s forwards; }
 
-        @keyframes pullScreen {
-            0% { left: -150px; opacity: 0; transform: rotate(90deg) scale(0.7); }
-            15% { opacity: 1; transform: rotate(90deg) scale(1.1); }
-            70% { opacity: 1; transform: rotate(90deg) scale(1); }
-            100% { left: 105vw; opacity: 0; transform: rotate(90deg) scale(0.8); }
+        /* Set Posisi Berjenjang 3 Roket di Tengah Layar */
+        .rocket-wrapper:nth-child(1) { top: -110px; }
+        .rocket-wrapper:nth-child(2) { top: 0px; }
+        .rocket-wrapper:nth-child(3) { top: 110px; }
+
+        /* Style Objek Roket SVG */
+        .rocket-svg {
+            width: 90px;
+            height: auto;
+            transform: rotate(90deg); /* Menghadap Kanan */
+            filter: drop-shadow(0 0 15px rgba(0, 173, 181, 0.6));
+            z-index: 2;
+        }
+
+        /* EFEK ASAP DAN API JET PRESTISIUS */
+        .jet-blast {
+            position: relative;
+            display: flex;
+            align-items: center;
+            right: 20px; /* Melekat di pantat roket */
+            z-index: 1;
+        }
+
+        .thruster-fire {
+            width: 45px;
+            height: 20px;
+            background: linear-gradient(to right, var(--fire-core), var(--fire), transparent);
+            border-radius: 50% 0 0 50%;
+            box-shadow: -10px 0 20px var(--fire);
+            animation: fireFlicker 0.1s infinite alternate;
+        }
+
+        .smoke-trail {
+            display: flex;
+            gap: 2px;
+            flex-direction: row-reverse;
+        }
+
+        .smoke-puff {
+            width: 35px;
+            height: 35px;
+            background: rgba(150, 150, 160, 0.35);
+            border-radius: 50%;
+            filter: blur(5px);
+            box-shadow: 0 0 12px rgba(255, 77, 0, 0.15);
+            animation: smokeBillow 0.4s infinite alternate;
+        }
+        .smoke-puff:nth-child(2) { width: 50px; height: 50px; background: rgba(120, 120, 130, 0.25); filter: blur(7px); }
+        .smoke-puff:nth-child(3) { width: 65px; height: 65px; background: rgba(90, 90, 100, 0.15); filter: blur(10px); }
+
+        @keyframes fireFlicker {
+            0% { transform: scaleY(0.9) scaleX(0.95); opacity: 0.9; }
+            100% { transform: scaleY(1.1) scaleX(1.1); opacity: 1; }
+        }
+
+        @keyframes smokeBillow {
+            0% { transform: scale(0.95) translateY(-2px); opacity: 0.6; }
+            100% { transform: scale(1.1) translateY(2px); opacity: 0.3; }
+        }
+
+        /* PEMACU ANIMASI TARIKAN HORIZONTAL */
+        .launch .rocket-wrapper:nth-child(1) { animation: pullHorizontal 0.85s cubic-bezier(0.25, 1, 0.5, 1) forwards; }
+        .launch .rocket-wrapper:nth-child(2) { animation: pullHorizontal 0.95s cubic-bezier(0.25, 1, 0.5, 1) 0.05s forwards; }
+        .launch .rocket-wrapper:nth-child(3) { animation: pullHorizontal 0.9s cubic-bezier(0.25, 1, 0.5, 1) 0.02s forwards; }
+
+        @keyframes pullHorizontal {
+            0% { left: -350px; opacity: 0; transform: scale(0.85); }
+            12% { opacity: 1; transform: scale(1.05); }
+            75% { opacity: 1; transform: scale(1); }
+            100% { left: 105vw; opacity: 0; transform: scale(0.9); }
         }
 
         .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; width: 100%; max-width: 500px; margin-top: 25px; position: relative; z-index: 10; }
@@ -161,7 +216,9 @@
             .card p { font-size: 0.9rem !important; }
             .stat-box { padding: 15px 30px; }
             .stat-box h3 { font-size: 2.3rem; }
-            .rocket { font-size: 2.8rem; }
+            .rocket-svg { width: 65px; }
+            .thruster-fire { width: 30px; height: 14px; }
+            .smoke-puff { width: 25px; height: 25px; }
             .contact-grid { grid-template-columns: 1fr; gap: 10px; margin-top: 15px; }
             .contact-grid a { padding: 12px; font-size: 0.9rem; }
         }
@@ -172,9 +229,21 @@
     <div class="stars-bg"></div>
 
     <div id="fleet" class="rocket-fleet">
-        <div class="rocket">🚀</div>
-        <div class="rocket">🚀</div>
-        <div class="rocket">🚀</div>
+        <div class="rocket-wrapper">
+            <div class="smoke-trail"><div class="smoke-puff"></div><div class="smoke-puff"></div><div class="smoke-puff"></div></div>
+            <div class="jet-blast"><div class="thruster-fire"></div></div>
+            <svg class="rocket-svg" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 2S4.5 8.5 4.5 14c0 4.14 3.36 7.5 7.5 7.5s7.5-3.36 7.5-7.5c0-5.5-7.5-12-7.5-12zm0 14.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" fill="#f0f0f0"/><path d="M12 5s-4 4.5-4 9c0 2.21 1.79 4 4 4s4-1.79 4-4c0-4.5-4-9-4-9z" fill="#00adb5"/></svg>
+        </div>
+        <div class="rocket-wrapper">
+            <div class="smoke-trail"><div class="smoke-puff"></div><div class="smoke-puff"></div><div class="smoke-puff"></div></div>
+            <div class="jet-blast"><div class="thruster-fire"></div></div>
+            <svg class="rocket-svg" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 2S4.5 8.5 4.5 14c0 4.14 3.36 7.5 7.5 7.5s7.5-3.36 7.5-7.5c0-5.5-7.5-12-7.5-12zm0 14.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" fill="#f0f0f0"/><path d="M12 5s-4 4.5-4 9c0 2.21 1.79 4 4 4s4-1.79 4-4c0-4.5-4-9-4-9z" fill="#00adb5"/></svg>
+        </div>
+        <div class="rocket-wrapper">
+            <div class="smoke-trail"><div class="smoke-puff"></div><div class="smoke-puff"></div><div class="smoke-puff"></div></div>
+            <div class="jet-blast"><div class="thruster-fire"></div></div>
+            <svg class="rocket-svg" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 2S4.5 8.5 4.5 14c0 4.14 3.36 7.5 7.5 7.5s7.5-3.36 7.5-7.5c0-5.5-7.5-12-7.5-12zm0 14.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" fill="#f0f0f0"/><path d="M12 5s-4 4.5-4 9c0 2.21 1.79 4 4 4s4-1.79 4-4c0-4.5-4-9-4-9z" fill="#00adb5"/></svg>
+        </div>
     </div>
 
     <nav>
@@ -250,14 +319,12 @@
         const fleet = document.getElementById('fleet');
         
         function goToPage(index) {
-            // Hapus class active dari semua menu, lalu pasang di menu yang di-klik
             document.querySelectorAll('.nav-links .nav-item').forEach(btn => btn.classList.remove('active'));
             document.getElementById(`link-${index}`).classList.add('active');
             
-            // Geser halaman slider utama
             slider.style.transform = `translateX(-${index * 100}vw)`;
             
-            // Picu ulang animasi 3 roket melesat horizontal pas di tengah screen
+            // Picu ulang efek luncuran horizontal roket kustom dengan asap
             fleet.classList.remove('launch');
             void fleet.offsetWidth; 
             fleet.classList.add('launch');
